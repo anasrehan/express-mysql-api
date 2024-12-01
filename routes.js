@@ -474,17 +474,26 @@ const upload = multer({ storage });
 Route.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Add a new project
 Route.post('/project-manager/add', upload.single('image'), (req, res) => {
-    const { name, link } = req.body;
-    if (!name || !link || !req.file) {
-        return res.status(400).send({ message: 'Name, link, and image are required' });
-    }
-    const imagePath = req.file.filename;
+    try {
+        const { name, link } = req.body;
+        if (!name || !link || !req.file) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
 
-    const query = "INSERT INTO project_manager (name, image_path, link) VALUES (?, ?, ?)";
-    db.query(query, [name, imagePath, link], (err, result) => {
-        if (err) return res.status(500).send({ message: 'Error adding project manager', error: err });
-        res.send({ id: result.insertId, name, image_path: imagePath, link });
-    });
+        const imagePath = req.file.filename;
+        const query = 'INSERT INTO project_manager (name, image_path, link) VALUES (?, ?, ?)';
+
+        db.query(query, [name, imagePath, link], (err, result) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({ message: 'Error adding project', error: err });
+            }
+            res.status(200).json({ id: result.insertId, name, image_path: imagePath, link });
+        });
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Internal Server Error', error });
+    }
 });
 
 // Get all projects
