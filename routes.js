@@ -485,21 +485,22 @@ Route.post('/project-manager/add', upload.single('image'), (req, res) => {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
-        const imagePath = req.file.filename;
+        const imageUrl = req.file.path; // Cloudinary returns the URL of the uploaded file
         const query = 'INSERT INTO project_manager (name, image_path, link) VALUES (?, ?, ?)';
 
-        db.query(query, [name, imagePath, link], (err, result) => {
+        db.query(query, [name, imageUrl, link], (err, result) => {
             if (err) {
                 console.error('Database error:', err);
                 return res.status(500).json({ message: 'Error adding project', error: err });
             }
-            res.status(200).json({ id: result.insertId, name, image_path: imagePath, link });
+            res.status(200).json({ id: result.insertId, name, image_path: imageUrl, link });
         });
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ message: 'Internal Server Error', error });
     }
 });
+
 
 // Get all projects
 Route.get('/project-manager', (req, res) => {
