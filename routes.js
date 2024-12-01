@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken"); const cloudinary = require('cloudinary').v2
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const path = require("path"); // For handling file paths
 const Route = express.Router();
+const multer = require("multer");
+
 
 // Multer storage configuration with file renaming
 // Initialize multer with storage
