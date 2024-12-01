@@ -1,8 +1,8 @@
 const express = require("express");
 const db = require("./db");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const multer = require("multer");
+const jwt = require("jsonwebtoken"); const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const path = require("path"); // For handling file paths
 const Route = express.Router();
 
@@ -461,12 +461,17 @@ Route.post("/education/add", (req, res) => {
 
 //project manage
 
-// Multer Configuration for File Uploads
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads/'),
-    filename: (req, file, cb) => {
-        const uniqueName = Date.now() + '-' + file.originalname.replace(/\s+/g, '_');
-        cb(null, uniqueName);
+cloudinary.config({
+    cloud_name: 'your-cloud-name',
+    api_key: 'your-api-key',
+    api_secret: 'your-api-secret',
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'project_manager', // Folder where files will be stored in Cloudinary
+        allowedFormats: ['jpg', 'jpeg', 'png'], // Restrict file types
     },
 });
 
