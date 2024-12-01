@@ -464,10 +464,11 @@ Route.post("/education/add", (req, res) => {
 //project manage
 
 cloudinary.config({
-    cloud_name: 'dcja7imnm',
-    api_key: '552963999146298',
-    api_secret: 'jW0AbOs1khS0XLcfVnlBtsnDsAk',
+    cloud_name: process.env.CLOUD_NAME,  // Get the cloud name from the environment variable
+    api_key: process.env.API_KEY,        // Get the API key from the environment variable
+    api_secret: process.env.API_SECRET   // Get the API secret from the environment variable
 });
+
 
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
@@ -479,13 +480,14 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 Route.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-// Add a new project
 Route.post('/project-manager/add', upload.single('image'), (req, res) => {
     try {
         const { name, link } = req.body;
         if (!name || !link || !req.file) {
             return res.status(400).json({ message: 'All fields are required' });
         }
+
+        console.log('Uploaded file:', req.file);  // Log the file details
 
         const imageUrl = req.file.path; // Cloudinary returns the URL of the uploaded file
         const query = 'INSERT INTO project_manager (name, image_path, link) VALUES (?, ?, ?)';
