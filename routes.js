@@ -464,9 +464,9 @@ Route.post("/education/add", (req, res) => {
 //project manage
 
 cloudinary.config({
-    cloud_name: 'your-cloud-name',
-    api_key: 'your-api-key',
-    api_secret: 'your-api-secret',
+    cloud_name: 'dcja7imnm',
+    api_key: '552963999146298',
+    api_secret: 'jW0AbOs1khS0XLcfVnlBtsnDsAk',
 });
 
 const storage = new CloudinaryStorage({
