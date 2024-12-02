@@ -1,11 +1,13 @@
 const express = require("express");
 const db = require("./db");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken"); const cloudinary = require('cloudinary').v2;
+const jwt = require("jsonwebtoken"); 
+const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const path = require("path"); // For handling file paths
 const Route = express.Router();
 const multer = require("multer");
+// const cloudinary = require('cloudinary');
 
 
 // Multer storage configuration with file renaming
@@ -465,9 +467,10 @@ Route.post("/education/add", (req, res) => {
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,  // Get the cloud name from the environment variable
-    api_key: process.env.API_KEY,        // Get the API key from the environment variable
-    api_secret: process.env.API_SECRET   // Get the API secret from the environment variable
+    api_key: process.env.API_KEY,       // Get the API key from the environment variable
+    api_secret: process.env.API_SECRET  // Get the API secret from the environment variable
 });
+
 
 
 const storage = new CloudinaryStorage({
